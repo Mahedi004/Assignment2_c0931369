@@ -1,0 +1,4 @@
+[
+    { "id": "101", "authorId": "1", "postContent": "Post by Mahedi" },
+    { "id": "102", "authorId": "2", "postContent": "Post by Tasnim" }
+]

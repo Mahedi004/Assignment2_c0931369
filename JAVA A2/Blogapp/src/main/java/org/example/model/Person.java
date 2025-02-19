@@ -1,42 +1,39 @@
-package com.blogapp.model;
+package com.blogapp;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
-import lombok.EqualsAndHashCode;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.extern.jackson.Jacksonized;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.blogapp.model.Blog;
+import com.blogapp.model.BlogPost;
+import com.blogapp.model.Person;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
-/** Represents a person with an ID, name, age, and gender.*/
+public class Main {
+    public static void main(String[] args) {
+        ObjectMapper objectMapper = new ObjectMapper();
 
-@Getter
-@ToString
-@EqualsAndHashCode
-@Builder
-@Jacksonized
-public class Person {
-    private final String id;
-    private final String firstName;
-    private final String lastName;
-    private final Integer age;
-    private final String gender;
+        try {
+            // Read JSON files and parse them into lists
+            List<Person> persons = objectMapper.readValue(new File("person.json"), objectMapper.getTypeFactory().constructCollectionType(List.class, Person.class));
+            List<BlogPost> blogPosts = objectMapper.readValue(new File("blogPosts.json"), objectMapper.getTypeFactory().constructCollectionType(List.class, BlogPost.class));
 
-    @JsonCreator
-    public Person(@JsonProperty("id") String id,
-                  @JsonProperty("firstName") String firstName,
-                  @JsonProperty("lastName") String lastName,
-                  @JsonProperty("age") Integer age,
-                  @JsonProperty("gender") String gender) {
-        if (id == null || id.isBlank()) throw new IllegalArgumentException("ID cannot be null or blank.");
-        if (firstName == null || firstName.isBlank()) throw new IllegalArgumentException("First Name cannot be null or blank.");
-        if (lastName == null || lastName.isBlank()) throw new IllegalArgumentException("Last Name cannot be null or blank.");
-        if (age != null && age < 0) throw new IllegalArgumentException("Age cannot be negative.");
+            // Create Blog instance
+            Blog blog = Blog.builder()
+                    .posts(blogPosts)
+                    .contributors(persons)
+                    .build();
 
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.gender = gender;
+            // Call the getPostsByAuthorAge method and print the result
+            Integer ageToSearch = 25; // Example age
+            List<String> postsByAuthorAge = blog.getPostsByAuthorAge(ageToSearch);
+            System.out.println("Posts by authors with age " + ageToSearch + ": " + postsByAuthorAge);
+
+            // Print total number of blog posts and contributor
+            System.out.println("Total Blog Posts: " + blogPosts.size());
+            System.out.println("Total Contributors: " + persons.size());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

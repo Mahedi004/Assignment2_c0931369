@@ -13,7 +13,7 @@ class PersonTest {
                 .id("C0931")
                 .firstName("Mahedi")
                 .lastName("Sunasra")
-                .age(30)
+                .age(25)
                 .gender("Male")
                 .build();
         assertNotNull(person);

@@ -1,12 +1,8 @@
 package com.blogapp.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
-import lombok.EqualsAndHashCode;
 import java.util.List;
+import java.util.stream.Collectors;
 
-/** Represents a blog with a list of posts and contributors.*/
 @Getter
 @ToString
 @EqualsAndHashCode
@@ -14,4 +10,18 @@ import java.util.List;
 public class Blog {
     private final List<BlogPost> posts;
     private final List<Person> contributors;
+
+    // Method to get posts by author's age
+    public List<String> getPostsByAuthorAge(Integer age) {
+        return posts.stream()
+                .filter(post -> post.getAuthorId() != null)
+                .filter(post -> {
+                    // Find the person with the matching authorId and check age
+                    return contributors.stream()
+                            .anyMatch(contributor -> contributor.getId().equals(post.getAuthorId())
+                                    && contributor.getAge().equals(age));
+                })
+                .map(BlogPost::getId)
+                .collect(Collectors.toList());
+    }
 }

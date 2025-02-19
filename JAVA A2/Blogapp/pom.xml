@@ -27,3 +27,20 @@
         <version>5.8.1</version>
     </dependency>
 </dependencies>
+
+<dependencies>
+<!-- Lombok for annotations -->
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.18.24</version>
+    <scope>provided</scope>
+</dependency>
+
+<!-- Jackson for JSON parsing -->
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.13.1</version>
+</dependency>
+</dependencies>
